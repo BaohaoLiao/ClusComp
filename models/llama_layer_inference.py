@@ -4,7 +4,7 @@ import torch.nn as nn
 from typing import Optional
 from transformers.models.llama.modeling_llama import (
     LlamaDecoderLayer, 
-    LlamaSdpaAttention, 
+    LlamaAttention, 
     LlamaMLP, 
     LlamaConfig, 
     LlamaModel, 
@@ -57,7 +57,7 @@ class CustomLlamaMLP(LlamaMLP):
         self.up_proj = CustomLinear(self.hidden_size, self.intermediate_size, self.num_clusters, self.cluster_dim, bias=config.mlp_bias)
         self.down_proj = CustomLinear(self.intermediate_size, self.hidden_size, self.num_clusters, self.cluster_dim, bias=config.mlp_bias)
         
-class CustomLlamaSdpaAttention(LlamaSdpaAttention):
+class CustomLlamaAttention(LlamaAttention):
     def __init__(self, config: LlamaConfig, layer_idx: Optional[int] = None):
         super().__init__(config, layer_idx)
         self.hidden_size = config.hidden_size
@@ -74,7 +74,7 @@ class CustomLlamaSdpaAttention(LlamaSdpaAttention):
 class CustomLlamaDecoderLayer(LlamaDecoderLayer):
     def __init__(self, config: LlamaConfig, layer_idx: int):
         super().__init__(config, layer_idx)
-        self.self_attn = CustomLlamaSdpaAttention(config=config, layer_idx=layer_idx)
+        self.self_attn = CustomLlamaAttention(config=config, layer_idx=layer_idx)
         self.mlp = CustomLlamaMLP(config)
 
 class CustomLlamaModel(LlamaModel):

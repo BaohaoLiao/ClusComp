@@ -4,7 +4,7 @@ import torch.nn as nn
 from typing import Optional
 from transformers.models.mistral.modeling_mistral import (
     MistralMLP,
-    MistralSdpaAttention,
+    MistralAttention,
     MistralConfig,
     MistralDecoderLayer,
     MistralModel,
@@ -57,7 +57,7 @@ class CustomMistralMLP(MistralMLP):
         self.up_proj = CustomLinear(self.hidden_size, self.intermediate_size, self.num_clusters, self.cluster_dim, bias=False)
         self.down_proj = CustomLinear(self.intermediate_size, self.hidden_size, self.num_clusters, self.cluster_dim, bias=False)
         
-class CustomMistralSdpaAttention(MistralSdpaAttention):
+class CustomMistralAttention(MistralAttention):
     def __init__(self, config: MistralConfig, layer_idx: Optional[int] = None):
         super().__init__(config, layer_idx)
         self.hidden_size = config.hidden_size
