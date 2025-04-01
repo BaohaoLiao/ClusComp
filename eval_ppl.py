@@ -25,6 +25,8 @@ def main(args):
         ClusCompModel = models.ClusterLayerLlamaForCausalLM
     elif "mistral" in args.model_name_or_path.split("/")[-1].lower():
         ClusCompModel = models.ClusterLayerMistralForCausalLM
+    elif "opt" in args.model_name_or_path.split("/")[-1].lower():
+        ClusCompModel = models.ClusterLayerOPTForCausalLM
 
     model = ClusCompModel.from_pretrained(
         args.model_name_or_path,
