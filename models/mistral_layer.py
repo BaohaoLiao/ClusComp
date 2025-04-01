@@ -74,7 +74,7 @@ class CustomMistralAttention(MistralAttention):
 class CustomMistralDecoderLayer(MistralDecoderLayer):
     def __init__(self, config: MistralConfig, layer_idx: int):
         super().__init__(config, layer_idx)
-        self.self_attn = CustomMistralSdpaAttention(config=config, layer_idx=layer_idx)
+        self.self_attn = CustomMistralAttention(config=config, layer_idx=layer_idx)
         self.mlp = CustomMistralMLP(config)
 
 class CustomMistralModel(MistralModel):
