@@ -94,6 +94,8 @@ def main(args):
         tokenizer.save_pretrained(args.save_dir)
         clus_config.save_pretrained(args.save_dir)
 """
+
+
 def main(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -119,7 +121,14 @@ def main(args):
     )
     
     clus_config = AutoConfig.from_pretrained(args.clus_model_name_or_path)
-    clus_model = models.ClusterLayerLlamaForCausalLM.from_pretrained(
+    if "llama" in args.clus_model_name_or_path.split("/")[-1].lower():
+        ClusCompModel = models.ClusterLayerLlamaForCausalLM
+    elif "mistral" in args.clus_model_name_or_path.split("/")[-1].lower():
+        ClusCompModel = models.ClusterLayerMistralForCausalLM
+    elif "opt" in args.clus_model_name_or_path.split("/")[-1].lower():
+        ClusCompModel = models.ClusterLayerOPTForCausalLM
+
+    clus_model = ClusCompModel.from_pretrained(
         args.clus_model_name_or_path,
         config=clus_config,
         device_map='cpu', 
